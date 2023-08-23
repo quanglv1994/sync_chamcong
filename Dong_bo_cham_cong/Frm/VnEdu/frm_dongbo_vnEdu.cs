@@ -24,6 +24,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
   {
     private readonly string path_file_data = Application.StartupPath + "/Data/Log.xml";
     private readonly string schema = "VnEdu";
+    private readonly string runKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
     public frm_dongbo_vnEdu()
     {
@@ -414,49 +415,69 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
     private void tuDongChayToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      RegistryKey myReg = Registry.CurrentUser.OpenSubKey
-            ("Software\\Dong_bo_cham_cong", true);
-
-      if (myReg == null)
-      {
-        RegistryKey regkey = Registry.CurrentUser.CreateSubKey("Software\\Dong_bo_cham_cong");
-        //mo registry khoi dong cung win
-        RegistryKey regstart = Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
-        string keyvalue = "1";
-        try
-        {
-          //chen gia tri key
-          regkey.SetValue("Index", keyvalue);
-          regstart.SetValue("Dong_bo_cham_cong", Application.StartupPath + "\\Dong_bo_cham_cong.exe");
-          ////dong tien trinh ghi key
-          regkey.Close();
-        }
-        catch (System.Exception ex)
-        {
-        }
-      }
+      StartupWithWindow(
+        appName: "Dong_bo_cham_cong", 
+        pathProgram: Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe"), 
+        enable: true
+      );
 
       check_tudongchay();
     }
+
     private void tatTudongChayToolStripMenuItem_Click(object sender, EventArgs e)
     {
-      RegistryKey myReg = Registry.CurrentUser.OpenSubKey
-            ("Software\\Dong_bo_cham_cong", true);
-      RegistryKey myStart = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+      StartupWithWindow(
+        appName: "Dong_bo_cham_cong",
+        pathProgram: Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe"),
+        enable: false
+      );
+      check_tudongchay();
+    }
 
-      if (myReg != null && myStart.GetValue("Dong_bo_cham_cong") != null)
+
+    private void StartupWithWindow(string appName, string pathProgram, bool enable)
+    {
+      Microsoft.Win32.RegistryKey startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey);
+      if (enable)
+      {
+        try 
+        {
+          if (startupKey.GetValue(appName) == null)
+          {
+            startupKey.Close();
+            startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey, true);
+            //startupKey.SetValue(AppName, Assembly.GetExecutingAssembly().Location + " /StartMinimized");
+            startupKey.SetValue(appName, pathProgram);
+            startupKey.Close();
+          }
+        }
+        catch(Exception ex)
+        {
+          string typeLog = "Error";
+          string message = "Không thể set khởi động cùng Window !";
+          SaveLog(typeLog, message);
+        }
+
+      }
+      else
       {
         try
         {
-          Registry.CurrentUser.DeleteSubKey("Software\\Dong_bo_cham_cong", true);
-          myStart.DeleteValue("Dong_bo_cham_cong");
+          startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey, true);
+          if (startupKey != null)
+          {
+            startupKey.DeleteValue(appName, false);
+            startupKey.Close();
+          }
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
+          string typeLog = "Error";
+          string message = "Không thể hủy khởi động cùng Window !";
+          SaveLog(typeLog, message);
         }
       }
-
-      check_tudongchay();
     }
+
   }
 }
