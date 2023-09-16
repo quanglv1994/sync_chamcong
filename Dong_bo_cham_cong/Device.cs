@@ -119,11 +119,11 @@ namespace Dong_bo_cham_cong
           return;
         }
 
-        var lastDevice = xmlObject.Descendants("Device").LastOrDefault();
+        XElement lastDevice = xmlObject.Descendants("Device").LastOrDefault();
         int newID = 1;
         if (lastDevice != null)
         {
-          newID = Convert.ToInt32(lastDevice.Attribute("Id").Value) + 1;
+          newID = Convert.ToInt32(lastDevice.Element("Id").Value) + 1;
         }
 
 

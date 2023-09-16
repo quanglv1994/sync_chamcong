@@ -1,22 +1,16 @@
 ﻿using GATEWAY_SDK;
 using Newtonsoft.Json;
-using RestSharp;
 using Dong_bo_cham_cong.Dto;
 using Dong_bo_cham_cong.Enums;
 using Dong_bo_cham_cong.Ultils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.Win32;
-using System.Threading;
 
 namespace Dong_bo_cham_cong.Frm.VnEdu
 {
@@ -24,7 +18,10 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
   {
     private readonly string path_file_data = Application.StartupPath + "/Data/Log.xml";
     private readonly string schema = "VnEdu";
+    private readonly string runReg = @"Software\Dong_bo_cham_cong";
     private readonly string runKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+    private readonly string appName = "Dong_bo_cham_cong";
+    private readonly string pathProgram = Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe");
 
     public frm_dongbo_vnEdu()
     {
@@ -37,11 +34,11 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
       var prevOpenedForm = Application.OpenForms.Cast<Form>().First();
 
-      if(prevOpenedForm.Name == this.Name)
+      if (prevOpenedForm.Name == this.Name)
       {
         btn_close.Visible = false;
       }
-
+     
       //load_data();
       load_logs();
       //run_jobs();
@@ -50,17 +47,19 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     }
     private void check_tudongchay()
     {
-      RegistryKey myReg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+      RegistryKey myReg = Registry.CurrentUser.OpenSubKey(runReg, true);
+      RegistryKey myStart = Registry.CurrentUser.OpenSubKey(runKey, true);
 
-      if (myReg.GetValue("Dong_bo_cham_cong") == null)
-      {
-        tuDongChayToolStripMenuItem.Visible = true;
-        tatTudongChayToolStripMenuItem.Visible = false;
-      }
-      else
+      if (myReg != null && myStart.GetValue(appName) != null)
       {
         tuDongChayToolStripMenuItem.Visible = false;
         tatTudongChayToolStripMenuItem.Visible = true;
+        this.WindowState = FormWindowState.Minimized;
+      }
+      else
+      {
+        tuDongChayToolStripMenuItem.Visible = true;
+        tatTudongChayToolStripMenuItem.Visible = false;
       }
 
     }
@@ -72,7 +71,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       }
       XDocument xmlObject = XDocument.Load(path_file_data);
       IEnumerable<XElement> logs = xmlObject.Descendants("Log").OrderByDescending(l => DateTime.Parse(l.Element("Created_at").Value)).ToList();
-      
+
       if (logs != null)
       {
         ltLogs.Invoke(new Action(() => { ltLogs.Clear(); }));
@@ -167,10 +166,10 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
                 listLogDevices = null;
                 string message = "Không thể kết nối được đến máy chấm công " + "http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString();
                 MessageBox.Show(message);
-                if(saveLog)
+                if (saveLog)
                 {
                   SaveLog("Error", message);
-                }  
+                }
               }
             }
           }
@@ -255,7 +254,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       {
         MessageBox.Show(string.Format("{0}: {1}", created_at, ex.Message));
       }
-  }
+    }
 
     private void dong_bo(DateTime tu_ngay, DateTime den_ngay)
     {
@@ -381,17 +380,17 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     {
       string path_file_job = Application.StartupPath + "/Data/Jobs.xml";
 
-      if(!File.Exists(path_file_job))
-      { 
+      if (!File.Exists(path_file_job))
+      {
         return;
-      }  
+      }
 
       XDocument xmlObject = XDocument.Load(path_file_job);
 
       IEnumerable<XElement> jobs = xmlObject.Descendants("Job").Where(j => Int32.Parse(j.Element("Hour").Value) == DateTime.Now.Hour && Int32.Parse(j.Element("Minute").Value) == DateTime.Now.Minute);
 
       timer1.Start();
-      if(jobs.Any())
+      if (jobs.Any())
       {
         dong_bo_async(DateTime.Now, DateTime.Now);
       }
@@ -416,8 +415,6 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private void tuDongChayToolStripMenuItem_Click(object sender, EventArgs e)
     {
       StartupWithWindow(
-        appName: "Dong_bo_cham_cong", 
-        pathProgram: Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe"), 
         enable: true
       );
 
@@ -427,54 +424,56 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private void tatTudongChayToolStripMenuItem_Click(object sender, EventArgs e)
     {
       StartupWithWindow(
-        appName: "Dong_bo_cham_cong",
-        pathProgram: Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe"),
         enable: false
       );
       check_tudongchay();
     }
 
 
-    private void StartupWithWindow(string appName, string pathProgram, bool enable)
+    private void StartupWithWindow(bool enable)
     {
-      Microsoft.Win32.RegistryKey startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey);
+      RegistryKey myReg = Registry.CurrentUser.OpenSubKey(runReg, true);
       if (enable)
       {
-        try 
+        if (myReg == null)
         {
-          if (startupKey.GetValue(appName) == null)
+          RegistryKey regkey = Registry.CurrentUser.CreateSubKey(runReg);
+          //mo registry khoi dong cung win
+          RegistryKey regstart = Registry.CurrentUser.CreateSubKey(runKey);
+          string keyvalue = "1";
+          try
           {
-            startupKey.Close();
-            startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey, true);
-            //startupKey.SetValue(AppName, Assembly.GetExecutingAssembly().Location + " /StartMinimized");
-            startupKey.SetValue(appName, pathProgram);
-            startupKey.Close();
+            //chen gia tri key
+            regkey.SetValue("Index", keyvalue);
+            regstart.SetValue(appName, pathProgram);
+            ////dong tien trinh ghi key
+            regkey.Close();
+          }
+          catch (Exception ex)
+          {
+            string typeLog = "Error";
+            string message = "Không thể set khởi động cùng Window !";
+            SaveLog(typeLog, message);
           }
         }
-        catch(Exception ex)
-        {
-          string typeLog = "Error";
-          string message = "Không thể set khởi động cùng Window !";
-          SaveLog(typeLog, message);
-        }
-
       }
       else
       {
-        try
+        RegistryKey myStart = Registry.CurrentUser.OpenSubKey(runKey, true);
+
+        if (myReg != null && myStart.GetValue(appName) != null)
         {
-          startupKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(runKey, true);
-          if (startupKey != null)
+          try
           {
-            startupKey.DeleteValue(appName, false);
-            startupKey.Close();
+            Registry.CurrentUser.DeleteSubKey(runReg, true);
+            myStart.DeleteValue(appName);
           }
-        }
-        catch (Exception ex)
-        {
-          string typeLog = "Error";
-          string message = "Không thể hủy khởi động cùng Window !";
-          SaveLog(typeLog, message);
+          catch (Exception ex)
+          {
+            string typeLog = "Error";
+            string message = "Không thể hủy khởi động cùng Window !";
+            SaveLog(typeLog, message);
+          }
         }
       }
     }
