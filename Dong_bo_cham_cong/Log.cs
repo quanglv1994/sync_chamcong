@@ -14,6 +14,8 @@ namespace Dong_bo_cham_cong
   public partial class frm_log : Form
   {
     private string path = Application.StartupPath + "/Data/Device.xml";
+    private string path_device_vnEdu = Application.StartupPath + "/Data/Device_vnEdu.xml";
+
     public int id;
     private int numberRecord = 20;
     private static int totalPage = 0;
@@ -47,6 +49,7 @@ namespace Dong_bo_cham_cong
           string end_time = txt_denngay.Value.ToString("yyyy-MM-ddT23:59:59+07:00");
 
           SDK_Hikvision hik = new SDK_Hikvision("http://" + device.Element("Ip").Value + ":" + device.Element("Port").Value, device.Element("Username").Value, device.Element("Password").Value);
+         
           string logs = hik.search_log(start_time, end_time, page, numberRecord);
 
           LogHikvision logHikvision = JsonConvert.DeserializeObject<LogHikvision>(logs);
@@ -226,6 +229,7 @@ namespace Dong_bo_cham_cong
     {
       List<int> serialList = new List<int>();
 
+      ApiCheckIn.VnEdu vnEdu = new ApiCheckIn.VnEdu();
       for (int i = 1; i <= totalPage; i++)
       {
         List<Info> listEvents = get_data_events(i);
@@ -233,26 +237,24 @@ namespace Dong_bo_cham_cong
         {
           if (_event.employeeNoString != "" && !string.IsNullOrEmpty(_event.employeeNoString))
           {
-            string dateCheckin = Convert.ToDateTime(_event.time).ToString("yyyy-MM-dd HH:mm:ss");
+            XDocument xmlObject = XDocument.Load(path);
+            XElement device = xmlObject.Descendants("Device").Where(c => Int32.Parse(c.Element("Id").Value) == id).FirstOrDefault();
+            
+            XDocument xmlObjectvnEdu = XDocument.Load(path_device_vnEdu);
+            XElement devicevnEdu = xmlObjectvnEdu.Descendants("Device").Where(c => c.Element("Ma").Value == device.Element("Ma").Value).FirstOrDefault();
 
-            var client = new RestClient("http://localhost:52149/api/apiCheckin/Post");
-            var request = new RestRequest("", Method.Post);
-            request.AddHeader("Content-Type", "application/json");
-            string queryString = "{" +
-              "\"_userCode\": \"" + _event.employeeNoString + "\"," +
-              "\"_dateCheckin\": \"" + dateCheckin + "\"," +
-              "\"_user\": 1" +
-              "}";
-            request.AddParameter("application/json", queryString, ParameterType.RequestBody);
-            var response = client.Execute(request);
-            var result = response.Content;
-            if (response.StatusCode == 0)
+            if (devicevnEdu == null)
             {
-              MessageBox.Show("Không thể kết nối được API đồng bộ chấm công !");
+              MessageBox.Show("Chưa cấu hình thiết bị điểm danh vnEdu !");
               return;
             }
 
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            string SN_MayDiemDanh_vnEdu = devicevnEdu.Element("SN_vnEdu").Value;
+            string Key_vnEdu = devicevnEdu.Element("Key_vnEdu").Value;
+
+            string result = vnEdu.checkin(SN_MayDiemDanh_vnEdu, Key_vnEdu, _event.employeeNoString, Convert.ToDateTime(_event.time).ToString("yyyy-MM-dd HH:mm:ss"));
+
+            if (result != "OK")
             {
               serialList.Add(_event.serialNo);
             }

@@ -39,6 +39,7 @@ namespace Dong_bo_cham_cong
       this.txt_page = new System.Windows.Forms.TextBox();
       this.grv_logs = new System.Windows.Forms.DataGridView();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.btn_dongbo_vnEdu = new System.Windows.Forms.Button();
       this.btn_dongbo = new System.Windows.Forms.Button();
       this.btn_close = new System.Windows.Forms.Button();
       this.btn_search = new System.Windows.Forms.Button();
@@ -46,7 +47,6 @@ namespace Dong_bo_cham_cong
       this.label2 = new System.Windows.Forms.Label();
       this.txt_tungay = new System.Windows.Forms.DateTimePicker();
       this.label1 = new System.Windows.Forms.Label();
-      this.btn_dongbo_vnEdu = new System.Windows.Forms.Button();
       this.groupBox1.SuspendLayout();
       this.panel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.grv_logs)).BeginInit();
@@ -166,12 +166,23 @@ namespace Dong_bo_cham_cong
       this.groupBox2.TabStop = false;
       this.groupBox2.Text = "Tìm kiếm log";
       // 
+      // btn_dongbo_vnEdu
+      // 
+      this.btn_dongbo_vnEdu.Enabled = false;
+      this.btn_dongbo_vnEdu.Location = new System.Drawing.Point(581, 76);
+      this.btn_dongbo_vnEdu.Name = "btn_dongbo_vnEdu";
+      this.btn_dongbo_vnEdu.Size = new System.Drawing.Size(167, 23);
+      this.btn_dongbo_vnEdu.TabIndex = 7;
+      this.btn_dongbo_vnEdu.Text = "Đồng bộ VnEdu";
+      this.btn_dongbo_vnEdu.UseVisualStyleBackColor = true;
+      this.btn_dongbo_vnEdu.Click += new System.EventHandler(this.btn_dongbo_vnEdu_Click);
+      // 
       // btn_dongbo
       // 
       this.btn_dongbo.Enabled = false;
-      this.btn_dongbo.Location = new System.Drawing.Point(467, 77);
+      this.btn_dongbo.Location = new System.Drawing.Point(421, 77);
       this.btn_dongbo.Name = "btn_dongbo";
-      this.btn_dongbo.Size = new System.Drawing.Size(108, 23);
+      this.btn_dongbo.Size = new System.Drawing.Size(154, 23);
       this.btn_dongbo.TabIndex = 6;
       this.btn_dongbo.Text = "Đồng bộ HRM";
       this.btn_dongbo.UseVisualStyleBackColor = true;
@@ -181,7 +192,7 @@ namespace Dong_bo_cham_cong
       // 
       this.btn_close.Location = new System.Drawing.Point(581, 40);
       this.btn_close.Name = "btn_close";
-      this.btn_close.Size = new System.Drawing.Size(111, 23);
+      this.btn_close.Size = new System.Drawing.Size(167, 23);
       this.btn_close.TabIndex = 5;
       this.btn_close.Text = "Đóng lại";
       this.btn_close.UseVisualStyleBackColor = true;
@@ -189,9 +200,9 @@ namespace Dong_bo_cham_cong
       // 
       // btn_search
       // 
-      this.btn_search.Location = new System.Drawing.Point(467, 40);
+      this.btn_search.Location = new System.Drawing.Point(421, 40);
       this.btn_search.Name = "btn_search";
-      this.btn_search.Size = new System.Drawing.Size(108, 23);
+      this.btn_search.Size = new System.Drawing.Size(154, 23);
       this.btn_search.TabIndex = 4;
       this.btn_search.Text = "Tìm kiếm";
       this.btn_search.UseVisualStyleBackColor = true;
@@ -231,17 +242,6 @@ namespace Dong_bo_cham_cong
       this.label1.Size = new System.Drawing.Size(59, 16);
       this.label1.TabIndex = 0;
       this.label1.Text = "Từ ngày:";
-      // 
-      // btn_dongbo_vnEdu
-      // 
-      this.btn_dongbo_vnEdu.Enabled = false;
-      this.btn_dongbo_vnEdu.Location = new System.Drawing.Point(581, 76);
-      this.btn_dongbo_vnEdu.Name = "btn_dongbo_vnEdu";
-      this.btn_dongbo_vnEdu.Size = new System.Drawing.Size(111, 23);
-      this.btn_dongbo_vnEdu.TabIndex = 7;
-      this.btn_dongbo_vnEdu.Text = "Đồng bộ VnEdu";
-      this.btn_dongbo_vnEdu.UseVisualStyleBackColor = true;
-      this.btn_dongbo_vnEdu.Click += new System.EventHandler(this.btn_dongbo_vnEdu_Click);
       // 
       // frm_log
       // 

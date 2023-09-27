@@ -163,7 +163,6 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
               }
               else
               {
-                listLogDevices = null;
                 string message = "Không thể kết nối được đến máy chấm công " + "http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString();
                 MessageBox.Show(message);
                 if (saveLog)
