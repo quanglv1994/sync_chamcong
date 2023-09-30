@@ -1,7 +1,6 @@
 ﻿using DigestAuth;
 using RestSharp;
 using System;
-using System.Collections.Generic;
 using System.Net;
 
 namespace GATEWAY_SDK
@@ -41,9 +40,10 @@ namespace GATEWAY_SDK
       try
       {
         string dir = "/ISAPI/System/deviceinfo";
-        var client = new RestClient(host + dir);
-        client.Authenticator = new DigestAuthenticator(username, password);
-        var request = new RestRequest("", Method.Get);
+        RestClient client = new RestClient(host + dir);
+        client.Authenticator = new DigestAuthenticator(username, password, timeout: 2000);//2s
+
+        RestRequest request = new RestRequest("", Method.Get);
         var response = client.Execute(request);
 
         HttpStatusCode status = response.StatusCode;
@@ -57,11 +57,11 @@ namespace GATEWAY_SDK
           return false;
         }
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         return false;
       }
-      
+
     }
     public string get_device()
     {
@@ -88,7 +88,7 @@ namespace GATEWAY_SDK
       {
         //string start_time = "2023-04-06T00:00:00+07:00";
         //string end_time = "2023-04-07T23:59:59+07:00";
-        string dir = "/ISAPI/AccessControl/AcsEvent?format=json&security=1";
+        string dir = "/ISAPI/AccessControl/AcsEvent?format=json";//&security=1
         var client = new RestClient(host + dir);
         client.Authenticator = new DigestAuthenticator(username, password);
         var request = new RestRequest("", Method.Post);
@@ -108,11 +108,38 @@ namespace GATEWAY_SDK
         var response = client.Execute(request);
         return response.Content;
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         return null;
       }
-      
+
+    }
+
+    public string totalRecords(string start_time, string end_time)
+    {
+      try
+      {
+        string dir = "/ISAPI/AccessControl/AcsEventTotalNum?format=json";
+        var client = new RestClient(host + dir);
+        client.Authenticator = new DigestAuthenticator(username, password);
+        var request = new RestRequest("", Method.Post);
+        string queryString = "{" +
+          "\"AcsEventTotalNumCond\": " +
+            "{" +
+              "\"major\": 0," +
+              "\"minor\": 0," +
+              "\"startTime\": \"" + start_time + "\"," +
+              "\"endTime\": \"" + end_time + "\"\n    " +
+            "}" +
+          "}";
+        request.AddParameter("text/plain", queryString, ParameterType.RequestBody);
+        var response = client.Execute(request);
+        return response.Content;
+      }
+      catch (Exception ex)
+      {
+        return null;
+      }
     }
   }
 }

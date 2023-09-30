@@ -1,19 +1,14 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
+﻿using RestSharp;
 using GATEWAY_SDK;
 using Dong_bo_cham_cong.Dto;
 using Dong_bo_cham_cong.Enums;
 using Dong_bo_cham_cong.Ultils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Dong_bo_cham_cong.Repositories;
 
 namespace Dong_bo_cham_cong
 {
@@ -21,6 +16,7 @@ namespace Dong_bo_cham_cong
   {
     private string path = Application.StartupPath + "/Data/Device.xml";
     public static List<Log> listLogs;
+    private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
 
     public Sync_logs()
     {
@@ -64,47 +60,44 @@ namespace Dong_bo_cham_cong
           int i = 1;
           foreach (DataRow dr in dt.Rows)
           {
+            Device device = new Device();
+            device.Ip = dr["Ip"].ToString();
+            device.Port = dr["Port"].ToString();
+            device.Username = dr["Username"].ToString();
+            device.Password = dr["Password"].ToString();
+
             VendorType _hang = (VendorType)Enum.Parse(typeof(VendorType), dr["Hang"].ToString(), true);
+
+            SDK_Hikvision hik = new SDK_Hikvision("http://" + device.Ip + ":" + device.Port, device.Username, device.Password);
 
             if (_hang == VendorType.Hikvision)
             {
-              SDK_Hikvision hik = new SDK_Hikvision("http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString(), dr["Username"].ToString(), dr["Password"].ToString());
               if (hik.login())
               {
-                string start_time = txt_tungay.Value.ToString("yyyy-MM-ddT00:00:00+07:00");
-                string end_time = txt_denngay.Value.ToString("yyyy-MM-ddT23:59:59+07:00");
-
                 int page = 1;
-                int numberRecord = 20;
+                int numberRecord = 30;
                 int totalPage = 1;
+                int totalMatches = logHikvisionRepository.getTotalEvent(txt_tungay.Value, txt_denngay.Value, device);
 
-
+                totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(totalMatches) / Convert.ToDouble(numberRecord)));
                 get_data_log:
-                if(page <= totalPage)
+                if (page <= totalPage)
                 {
-                  string logs = hik.search_log(start_time, end_time, page, numberRecord);
+                  List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord);
 
-                  LogHikvision logHikvision = JsonConvert.DeserializeObject<LogHikvision>(logs);
-
-                  if (logHikvision.AcsEvent.InfoList?.Count > 0)
+                  foreach (Info log in infoList)
                   {
-                    totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(logHikvision.AcsEvent.totalMatches) / Convert.ToDouble(numberRecord)));
-
-                    //logHikvision.AcsEvent.InfoList;
-                    foreach(Info log in logHikvision.AcsEvent.InfoList)
+                    listLogs.Add(new Log()
                     {
-                      listLogs.Add(new Log()
-                      {
-                        Stt = i,
-                        UserCode = log.employeeNoString,
-                        Name = log.name,
-                        Time = Convert.ToDateTime(log.time),
-                        Attendance = log.attendanceStatus,
-                        Ip_Device = dr["Ip"].ToString(),
-                        Serial_Device = dr["Ma"].ToString()
-                      });
-                      i++;
-                    }
+                      Stt = i,
+                      UserCode = log.employeeNoString,
+                      Name = log.name,
+                      Time = Convert.ToDateTime(log.time),
+                      Attendance = log.attendanceStatus,
+                      Ip_Device = dr["Ip"].ToString(),
+                      Serial_Device = dr["Ma"].ToString()
+                    });
+                    i++;
                   }
                   page++;
                   goto get_data_log;
@@ -113,13 +106,14 @@ namespace Dong_bo_cham_cong
               }
               else
               {
-                MessageBox.Show("Không thể kết nối được đến máy chấm công "+ "http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString());
+                string message = "Không thể kết nối được đến máy chấm công " + "http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString();
+                MessageBox.Show(message);
               }
             }
           }
 
         }
-        if(listLogs.Count > 0)
+        if (listLogs.Count > 0)
         {
           btn_dongbo.Invoke(new Action(() => { btn_dongbo.Enabled = true; }));
         }

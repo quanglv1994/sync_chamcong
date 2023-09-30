@@ -1,13 +1,12 @@
 ﻿using System;
-using Newtonsoft.Json;
 using Dong_bo_cham_cong.Dto;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using GATEWAY_SDK;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using RestSharp;
+using Dong_bo_cham_cong.Repositories;
 
 namespace Dong_bo_cham_cong
 {
@@ -15,7 +14,7 @@ namespace Dong_bo_cham_cong
   {
     private string path = Application.StartupPath + "/Data/Device.xml";
     private string path_device_vnEdu = Application.StartupPath + "/Data/Device_vnEdu.xml";
-
+    private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
     public int id;
     private int numberRecord = 20;
     private static int totalPage = 0;
@@ -28,7 +27,7 @@ namespace Dong_bo_cham_cong
     private void frm_log_Load(object sender, EventArgs e)
     {
 
-      numberRecord = 20;
+      numberRecord = 30;
       totalPage = 0;
       load_data();
     }
@@ -37,34 +36,30 @@ namespace Dong_bo_cham_cong
     {
       XDocument xmlObject = XDocument.Load(path);
 
-      XElement device = xmlObject.Descendants("Device").Where(c => Int32.Parse(c.Element("Id").Value) == id).FirstOrDefault();
-      if (device != null)
+      XElement deviceXml = xmlObject.Descendants("Device").Where(c => Int32.Parse(c.Element("Id").Value) == id).FirstOrDefault();
+      if (deviceXml != null)
       {
         try
         {
 
           //string start_time = "2023-04-06T00:00:00+07:00";
           //string end_time = "2023-04-07T23:59:59+07:00";
-          string start_time = txt_tungay.Value.ToString("yyyy-MM-ddT00:00:00+07:00");
-          string end_time = txt_denngay.Value.ToString("yyyy-MM-ddT23:59:59+07:00");
+          //string start_time = txt_tungay.Value.ToString("yyyy-MM-ddT00:00:00+07:00");
+          //string end_time = txt_denngay.Value.ToString("yyyy-MM-ddT23:59:59+07:00");
 
-          SDK_Hikvision hik = new SDK_Hikvision("http://" + device.Element("Ip").Value + ":" + device.Element("Port").Value, device.Element("Username").Value, device.Element("Password").Value);
-         
-          string logs = hik.search_log(start_time, end_time, page, numberRecord);
+          Device device = new Device();
+          device.Ip = deviceXml.Element("Ip").Value;
+          device.Port = deviceXml.Element("Port").Value;
+          device.Username = deviceXml.Element("Username").Value;
+          device.Password = deviceXml.Element("Password").Value;
 
-          LogHikvision logHikvision = JsonConvert.DeserializeObject<LogHikvision>(logs);
+          int totalMatches = logHikvisionRepository.getTotalEvent(txt_tungay.Value, txt_denngay.Value, device);
+          totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(totalMatches) / Convert.ToDouble(numberRecord)));
+          lb_totalPage.Text = totalPage.ToString();
 
-          if (logHikvision.AcsEvent.InfoList?.Count > 0)
-          {
-            totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(logHikvision.AcsEvent.totalMatches) / Convert.ToDouble(numberRecord)));
-            lb_totalPage.Text = totalPage.ToString();
+          List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord);
 
-            return logHikvision.AcsEvent.InfoList;
-          }
-          else
-          {
-            return new List<Info>();
-          }
+          return infoList;
         }
         catch (Exception ex)
         {

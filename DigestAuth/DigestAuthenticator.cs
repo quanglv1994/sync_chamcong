@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using RestSharp.Authenticators;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DigestAuth
@@ -26,6 +27,12 @@ namespace DigestAuth
       Timeout = DEFAULT_TIMEOUT;
     }
 
+    public DigestAuthenticator(string username, string password, int timeout)
+    {
+      _username = username;
+      _password = password;
+      Timeout = timeout;
+    }
     /// <summary>
     ///     The web request timeout (default 100000).
     /// </summary>

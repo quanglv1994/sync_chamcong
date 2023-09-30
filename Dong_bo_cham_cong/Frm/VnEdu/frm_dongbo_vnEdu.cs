@@ -1,5 +1,4 @@
 ﻿using GATEWAY_SDK;
-using Newtonsoft.Json;
 using Dong_bo_cham_cong.Dto;
 using Dong_bo_cham_cong.Enums;
 using Dong_bo_cham_cong.Ultils;
@@ -11,6 +10,8 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using Dong_bo_cham_cong.Repositories;
+using System.Text.Json;
 
 namespace Dong_bo_cham_cong.Frm.VnEdu
 {
@@ -22,6 +23,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private readonly string runKey = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
     private readonly string appName = "Dong_bo_cham_cong";
     private readonly string pathProgram = Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe");
+    private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
 
     public frm_dongbo_vnEdu()
     {
@@ -114,47 +116,44 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
           int i = 1;
           foreach (DataRow dr in dt.Rows)
           {
+            Device device = new Device();
+            device.Ip = dr["Ip"].ToString();
+            device.Port = dr["Port"].ToString();
+            device.Username = dr["Username"].ToString();
+            device.Password = dr["Password"].ToString();
+
             VendorType _hang = (VendorType)Enum.Parse(typeof(VendorType), dr["Hang"].ToString(), true);
+
+            SDK_Hikvision hik = new SDK_Hikvision("http://" + device.Ip + ":" + device.Port, device.Username, device.Password);
 
             if (_hang == VendorType.Hikvision)
             {
-              SDK_Hikvision hik = new SDK_Hikvision("http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString(), dr["Username"].ToString(), dr["Password"].ToString());
               if (hik.login())
               {
-                string start_time = tu_ngay.ToString("yyyy-MM-ddT00:00:00+07:00");
-                string end_time = den_ngay.ToString("yyyy-MM-ddT23:59:59+07:00");
-
                 int page = 1;
-                int numberRecord = 20;
+                int numberRecord = 30;
                 int totalPage = 1;
+                int totalMatches = logHikvisionRepository.getTotalEvent(tu_ngay, den_ngay, device);
 
-
+                totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(totalMatches) / Convert.ToDouble(numberRecord)));
                 get_data_log:
                 if (page <= totalPage)
                 {
-                  string logs = hik.search_log(start_time, end_time, page, numberRecord);
+                  List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord);
 
-                  LogHikvision logHikvision = JsonConvert.DeserializeObject<LogHikvision>(logs);
-
-                  if (logHikvision.AcsEvent.InfoList?.Count > 0)
+                  foreach (Info log in infoList)
                   {
-                    totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(logHikvision.AcsEvent.totalMatches) / Convert.ToDouble(numberRecord)));
-
-                    //logHikvision.AcsEvent.InfoList;
-                    foreach (Info log in logHikvision.AcsEvent.InfoList)
+                    listLogDevices.Add(new Log()
                     {
-                      listLogDevices.Add(new Log()
-                      {
-                        Stt = i,
-                        UserCode = log.employeeNoString,
-                        Name = log.name,
-                        Time = Convert.ToDateTime(log.time),
-                        Attendance = log.attendanceStatus,
-                        Ip_Device = dr["Ip"].ToString(),
-                        Serial_Device = dr["Ma"].ToString()
-                      });
-                      i++;
-                    }
+                      Stt = i,
+                      UserCode = log.employeeNoString,
+                      Name = log.name,
+                      Time = Convert.ToDateTime(log.time),
+                      Attendance = log.attendanceStatus,
+                      Ip_Device = dr["Ip"].ToString(),
+                      Serial_Device = dr["Ma"].ToString()
+                    });
+                    i++;
                   }
                   page++;
                   goto get_data_log;
@@ -333,7 +332,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     {
       this.Close();
     }
-
+    
     private void btn_search_Click(object sender, EventArgs e)
     {
       load_data_async();

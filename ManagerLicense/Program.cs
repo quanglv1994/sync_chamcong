@@ -1,15 +1,12 @@
-﻿using Dong_bo_cham_cong.Frm.VnEdu;
-using Dong_bo_cham_cong.Ultils;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Dong_bo_cham_cong
+namespace ManagerLicense
 {
-  static class Program
+  internal static class Program
   {
     /// <summary>
     /// The main entry point for the application.
@@ -19,10 +16,7 @@ namespace Dong_bo_cham_cong
     {
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
-      UpdateVersion.Init();
-      UpdateVersion.RunUpdate();
-
-      Application.Run(new frm_dongbo_vnEdu());
+      Application.Run(new Form1());
     }
   }
 }

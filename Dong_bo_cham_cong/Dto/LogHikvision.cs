@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Dong_bo_cham_cong.Dto
 {
@@ -31,6 +27,16 @@ namespace Dong_bo_cham_cong.Dto
 
   public class LogHikvision
   {
-    public AcsEvent @AcsEvent;
+    public AcsEvent AcsEvent { get; set; }
+  }
+
+  public class AcsEventTotalNumHikvision
+  {
+    public AcsEventTotalNum AcsEventTotalNum { get; set; }
+  }
+
+  public class AcsEventTotalNum
+  {
+    public int totalNum { get; set; }
   }
 }
