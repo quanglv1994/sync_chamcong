@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using Microsoft.Win32;
 using Dong_bo_cham_cong.Repositories;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Dong_bo_cham_cong.Frm.VnEdu
@@ -25,6 +24,8 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private readonly string appName = "Dong_bo_cham_cong";
     private readonly string pathProgram = Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe");
     private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
+    private readonly CaLamViecRepository caLamViecRepository = new CaLamViecRepository();
+    private List<CaLamViec> _listCaLamViecs { get; set; }
 
     #region Common
     public frm_dongbo_vnEdu()
@@ -34,6 +35,8 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
     private void frm_dongbo_vnEdu_Load(object sender, EventArgs e)
     {
+      _listCaLamViecs = caLamViecRepository.GetList();
+      txt_tungay.Value = DateTime.Now.AddHours(-1);
       panel1.Controls.Add(new uc_MainMenu());
 
       var prevOpenedForm = Application.OpenForms.Cast<Form>().First();
@@ -152,7 +155,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
         return;
       }
       XDocument xmlObject = XDocument.Load(path_file_data);
-      IEnumerable<XElement> logs = xmlObject.Descendants("Log").OrderByDescending(l => DateTime.Parse(l.Element("Created_at").Value)).ToList();
+      IEnumerable<XElement> logs = xmlObject.Descendants("Log").OrderBy(l => DateTime.Parse(l.Element("Created_at").Value)).ToList();
 
       if (logs != null)
       {
@@ -186,6 +189,28 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
         NotifyMessage(String.Format("{0}: {1}", DateTime.Now, ex.Message));
         return new List<Info>();
       }
+    }
+
+    private CaLamViec getTimeLogHikUpdated(Info infoLog)
+    {
+      foreach (var calamviec in _listCaLamViecs)
+      {
+        DateTime time = Convert.ToDateTime(infoLog.time);
+
+        int hour = time.Hour;
+        int minute = time.Minute;
+
+        DateTime timeCheck = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
+
+        DateTime startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, calamviec.StartHour, calamviec.StartMinute, 0);
+        DateTime endTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, calamviec.EndHour, calamviec.EndMinute, 0);
+
+        if (timeCheck >= startTime && timeCheck <= endTime)
+        {
+          return calamviec;
+        }
+      }
+      return null;
     }
 
     private List<Log> getLogDevice(DateTime tu_ngay, DateTime den_ngay, bool saveLog = false)
@@ -237,17 +262,68 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
                   foreach (Info info in listInfos)
                   {
-                    listLogDevices.Add(new Log()
+                    foreach (var calamviec in _listCaLamViecs)
                     {
-                      Stt = i,
-                      UserCode = info.employeeNoString,
-                      Name = info.name,
-                      Time = Convert.ToDateTime(info.time),
-                      Attendance = info.attendanceStatus,
-                      Ip_Device = dr["Ip"].ToString(),
-                      Serial_Device = dr["Ma"].ToString()
-                    });
-                    i++;
+                      DateTime timeInfo = Convert.ToDateTime(info.time);
+
+                      int hour = timeInfo.Hour;
+                      int minute = timeInfo.Minute;
+
+                      DateTime timeCheck = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
+
+                      DateTime startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, calamviec.StartHour, calamviec.StartMinute, 0);
+                      DateTime endTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, calamviec.EndHour, calamviec.EndMinute, 0);
+
+                      if (timeCheck >= startTime && timeCheck <= endTime)
+                      {
+                        Log logExist = null;
+
+                        foreach (var x in listLogDevices)
+                        {
+                          DateTime startTimeLog = new DateTime(x.Time.Year, x.Time.Month, x.Time.Day, calamviec.StartHour, calamviec.StartMinute, 0);
+                          DateTime endTimeLog = new DateTime(x.Time.Year, x.Time.Month, x.Time.Day, calamviec.EndHour, calamviec.EndMinute, 0);
+
+                          if (x.UserCode.Equals(info.employeeNoString)
+                             && x.Time.ToShortDateString().Equals(timeInfo.ToShortDateString())
+                             && x.Time >= startTimeLog && x.Time <= endTimeLog)
+                          {
+                            logExist = x;
+                            break;
+                          }
+                        }
+                        //logExist = listLogDevices.FirstOrDefault(x =>
+                        //    x.UserCode.Equals(info.employeeNoString)
+                        //   && x.Time.ToShortDateString().Equals(timeInfo.ToShortDateString())
+                        //   && x.Time >= startTime && x.Time <= endTime);
+
+
+                        if (logExist == null)
+                        {
+                          listLogDevices.Add(new Log()
+                          {
+                            Stt = i,
+                            UserCode = info.employeeNoString,
+                            Name = info.name,
+                            Time = Convert.ToDateTime(info.time),
+                            Attendance = info.attendanceStatus,
+                            Ip_Device = dr["Ip"].ToString(),
+                            Serial_Device = dr["Ma"].ToString()
+                          });
+
+                          i++;
+                        }
+                        else if(logExist.Time > timeInfo)
+                        {
+                          var itemIndex = listLogDevices.FindIndex(x => x.Equals(logExist));
+                          if (itemIndex > -1)
+                          {
+                            listLogDevices.ElementAt(itemIndex).Time = Convert.ToDateTime(info.time);
+                          }
+                        }
+
+                        break;
+                      }
+                    }
                   }
 
                   //Thread.Sleep(1000);
@@ -264,7 +340,6 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
               }
             }
 
-
           }
         }
       }
@@ -278,7 +353,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       }
       grLogDevices.Invoke(new Action(() =>
       {
-        grLogDevices.Text = String.Format("Tổng: {0} bản ghi", totalEvent);
+        lbTotalLog.Text = String.Format("Tổng: {0} bản ghi điểm danh", totalEvent);
       }
        ));
       //grLogDevices.Text = String.Format("Tổng: {0} bản ghi", totalEvent);
@@ -301,7 +376,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       grv_logs.Invoke(new Action(() =>
       {
         //grLogDevices.Text = String.Format("Tổng: {0} bản ghi", listLogDevices.Count);
-
+        lbTotalSync.Text = String.Format("Tổng: {0} bản ghi", listLogDevices.Count);
         grv_logs.DataSource = listLogDevices;
       }
       ));
@@ -343,7 +418,9 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
         );
         xmlObject.Element(schema).Add(log);
         xmlObject.Save(path_file_data);
-        load_logs();
+        //load_logs();
+        var listViewItem = new ListViewItem(log.Element("Created_at").Value + ": " + log.Element("Message").Value);
+        ltLogs.Invoke(new Action(() => { ltLogs.Items.Add(listViewItem); }));
 
         if (this.Visible)
         {

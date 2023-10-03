@@ -26,7 +26,7 @@ namespace Dong_bo_cham_cong
 
     private void frm_log_Load(object sender, EventArgs e)
     {
-
+      txt_tungay.Value = DateTime.Now.AddHours(-1);
       numberRecord = 30;
       totalPage = 0;
       load_data();

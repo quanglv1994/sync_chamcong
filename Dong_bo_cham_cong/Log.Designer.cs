@@ -233,7 +233,7 @@ namespace Dong_bo_cham_cong
       // txt_denngay
       // 
       this.txt_denngay.CustomFormat = "dd/MM/yyyy HH:mm";
-      this.txt_denngay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+      this.txt_denngay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
       this.txt_denngay.Location = new System.Drawing.Point(83, 78);
       this.txt_denngay.Name = "txt_denngay";
       this.txt_denngay.Size = new System.Drawing.Size(255, 22);
@@ -251,7 +251,7 @@ namespace Dong_bo_cham_cong
       // txt_tungay
       // 
       this.txt_tungay.CustomFormat = "dd/MM/yyyy HH:mm";
-      this.txt_tungay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+      this.txt_tungay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
       this.txt_tungay.Location = new System.Drawing.Point(83, 41);
       this.txt_tungay.Name = "txt_tungay";
       this.txt_tungay.Size = new System.Drawing.Size(255, 22);

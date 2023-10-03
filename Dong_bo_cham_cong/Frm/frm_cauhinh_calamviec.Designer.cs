@@ -29,22 +29,22 @@
     private void InitializeComponent()
     {
       this.groupBox1 = new System.Windows.Forms.GroupBox();
-      this.groupBox2 = new System.Windows.Forms.GroupBox();
-      this.lbMa = new System.Windows.Forms.Label();
-      this.txtMa = new System.Windows.Forms.TextBox();
-      this.txtTen = new System.Windows.Forms.TextBox();
-      this.lbTen = new System.Windows.Forms.Label();
-      this.label1 = new System.Windows.Forms.Label();
-      this.txtStartHour = new System.Windows.Forms.NumericUpDown();
-      this.txtStartMinute = new System.Windows.Forms.NumericUpDown();
-      this.label2 = new System.Windows.Forms.Label();
+      this.btnClose = new System.Windows.Forms.Button();
+      this.btnSave = new System.Windows.Forms.Button();
+      this.btnAdd = new System.Windows.Forms.Button();
       this.txtEndMinute = new System.Windows.Forms.NumericUpDown();
       this.txtEndHour = new System.Windows.Forms.NumericUpDown();
       this.label3 = new System.Windows.Forms.Label();
+      this.label2 = new System.Windows.Forms.Label();
+      this.txtStartMinute = new System.Windows.Forms.NumericUpDown();
+      this.txtStartHour = new System.Windows.Forms.NumericUpDown();
+      this.label1 = new System.Windows.Forms.Label();
+      this.txtTen = new System.Windows.Forms.TextBox();
+      this.lbTen = new System.Windows.Forms.Label();
+      this.txtMa = new System.Windows.Forms.TextBox();
+      this.lbMa = new System.Windows.Forms.Label();
+      this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.grvCaLamViec = new System.Windows.Forms.DataGridView();
-      this.btnAdd = new System.Windows.Forms.Button();
-      this.btnSave = new System.Windows.Forms.Button();
-      this.btnClose = new System.Windows.Forms.Button();
       this.STT = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Ma = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.Ten = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,11 +57,11 @@
       this.btnEdit = new System.Windows.Forms.DataGridViewButtonColumn();
       this.btnDelete = new System.Windows.Forms.DataGridViewButtonColumn();
       this.groupBox1.SuspendLayout();
-      this.groupBox2.SuspendLayout();
-      ((System.ComponentModel.ISupportInitialize)(this.txtStartHour)).BeginInit();
-      ((System.ComponentModel.ISupportInitialize)(this.txtStartMinute)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.txtEndMinute)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this.txtEndHour)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.txtStartMinute)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.txtStartHour)).BeginInit();
+      this.groupBox2.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.grvCaLamViec)).BeginInit();
       this.SuspendLayout();
       // 
@@ -89,90 +89,35 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Cấu hình ca điểm danh";
       // 
-      // groupBox2
+      // btnClose
       // 
-      this.groupBox2.Controls.Add(this.grvCaLamViec);
-      this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.groupBox2.Location = new System.Drawing.Point(0, 141);
-      this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(800, 309);
-      this.groupBox2.TabIndex = 1;
-      this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Danh sách ca điểm danh";
+      this.btnClose.Location = new System.Drawing.Point(426, 106);
+      this.btnClose.Name = "btnClose";
+      this.btnClose.Size = new System.Drawing.Size(75, 23);
+      this.btnClose.TabIndex = 13;
+      this.btnClose.Text = "Đóng";
+      this.btnClose.UseVisualStyleBackColor = true;
+      this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
       // 
-      // lbMa
+      // btnSave
       // 
-      this.lbMa.AutoSize = true;
-      this.lbMa.Location = new System.Drawing.Point(93, 29);
-      this.lbMa.Name = "lbMa";
-      this.lbMa.Size = new System.Drawing.Size(29, 16);
-      this.lbMa.TabIndex = 0;
-      this.lbMa.Text = "Mã:";
+      this.btnSave.Location = new System.Drawing.Point(345, 106);
+      this.btnSave.Name = "btnSave";
+      this.btnSave.Size = new System.Drawing.Size(75, 23);
+      this.btnSave.TabIndex = 12;
+      this.btnSave.Text = "Lưu lại";
+      this.btnSave.UseVisualStyleBackColor = true;
+      this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
       // 
-      // txtMa
+      // btnAdd
       // 
-      this.txtMa.Location = new System.Drawing.Point(128, 26);
-      this.txtMa.Name = "txtMa";
-      this.txtMa.Size = new System.Drawing.Size(158, 22);
-      this.txtMa.TabIndex = 1;
-      // 
-      // txtTen
-      // 
-      this.txtTen.Location = new System.Drawing.Point(451, 26);
-      this.txtTen.Name = "txtTen";
-      this.txtTen.Size = new System.Drawing.Size(343, 22);
-      this.txtTen.TabIndex = 3;
-      // 
-      // lbTen
-      // 
-      this.lbTen.AutoSize = true;
-      this.lbTen.Location = new System.Drawing.Point(393, 29);
-      this.lbTen.Name = "lbTen";
-      this.lbTen.Size = new System.Drawing.Size(52, 16);
-      this.lbTen.TabIndex = 2;
-      this.lbTen.Text = "Tên ca:";
-      // 
-      // label1
-      // 
-      this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(14, 62);
-      this.label1.Name = "label1";
-      this.label1.Size = new System.Drawing.Size(108, 16);
-      this.label1.TabIndex = 4;
-      this.label1.Text = "Giờ/phút bắt đầu:";
-      // 
-      // txtStartHour
-      // 
-      this.txtStartHour.Location = new System.Drawing.Point(129, 60);
-      this.txtStartHour.Maximum = new decimal(new int[] {
-            23,
-            0,
-            0,
-            0});
-      this.txtStartHour.Name = "txtStartHour";
-      this.txtStartHour.Size = new System.Drawing.Size(56, 22);
-      this.txtStartHour.TabIndex = 5;
-      // 
-      // txtStartMinute
-      // 
-      this.txtStartMinute.Location = new System.Drawing.Point(201, 60);
-      this.txtStartMinute.Maximum = new decimal(new int[] {
-            59,
-            0,
-            0,
-            0});
-      this.txtStartMinute.Name = "txtStartMinute";
-      this.txtStartMinute.Size = new System.Drawing.Size(56, 22);
-      this.txtStartMinute.TabIndex = 6;
-      // 
-      // label2
-      // 
-      this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(191, 60);
-      this.label2.Name = "label2";
-      this.label2.Size = new System.Drawing.Size(10, 16);
-      this.label2.TabIndex = 7;
-      this.label2.Text = ":";
+      this.btnAdd.Location = new System.Drawing.Point(264, 106);
+      this.btnAdd.Name = "btnAdd";
+      this.btnAdd.Size = new System.Drawing.Size(75, 23);
+      this.btnAdd.TabIndex = 11;
+      this.btnAdd.Text = "Thêm mới";
+      this.btnAdd.UseVisualStyleBackColor = true;
+      this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
       // 
       // txtEndMinute
       // 
@@ -205,7 +150,92 @@
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(108, 16);
       this.label3.TabIndex = 8;
-      this.label3.Text = "Giờ/phút bắt đầu:";
+      this.label3.Text = "Giờ/phút kết thúc:";
+      // 
+      // label2
+      // 
+      this.label2.AutoSize = true;
+      this.label2.Location = new System.Drawing.Point(191, 60);
+      this.label2.Name = "label2";
+      this.label2.Size = new System.Drawing.Size(10, 16);
+      this.label2.TabIndex = 7;
+      this.label2.Text = ":";
+      // 
+      // txtStartMinute
+      // 
+      this.txtStartMinute.Location = new System.Drawing.Point(201, 60);
+      this.txtStartMinute.Maximum = new decimal(new int[] {
+            59,
+            0,
+            0,
+            0});
+      this.txtStartMinute.Name = "txtStartMinute";
+      this.txtStartMinute.Size = new System.Drawing.Size(56, 22);
+      this.txtStartMinute.TabIndex = 6;
+      // 
+      // txtStartHour
+      // 
+      this.txtStartHour.Location = new System.Drawing.Point(129, 60);
+      this.txtStartHour.Maximum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            0});
+      this.txtStartHour.Name = "txtStartHour";
+      this.txtStartHour.Size = new System.Drawing.Size(56, 22);
+      this.txtStartHour.TabIndex = 5;
+      // 
+      // label1
+      // 
+      this.label1.AutoSize = true;
+      this.label1.Location = new System.Drawing.Point(14, 62);
+      this.label1.Name = "label1";
+      this.label1.Size = new System.Drawing.Size(108, 16);
+      this.label1.TabIndex = 4;
+      this.label1.Text = "Giờ/phút bắt đầu:";
+      // 
+      // txtTen
+      // 
+      this.txtTen.Location = new System.Drawing.Point(451, 26);
+      this.txtTen.Name = "txtTen";
+      this.txtTen.Size = new System.Drawing.Size(343, 22);
+      this.txtTen.TabIndex = 3;
+      // 
+      // lbTen
+      // 
+      this.lbTen.AutoSize = true;
+      this.lbTen.Location = new System.Drawing.Point(393, 29);
+      this.lbTen.Name = "lbTen";
+      this.lbTen.Size = new System.Drawing.Size(52, 16);
+      this.lbTen.TabIndex = 2;
+      this.lbTen.Text = "Tên ca:";
+      // 
+      // txtMa
+      // 
+      this.txtMa.Location = new System.Drawing.Point(128, 26);
+      this.txtMa.Name = "txtMa";
+      this.txtMa.Size = new System.Drawing.Size(158, 22);
+      this.txtMa.TabIndex = 1;
+      // 
+      // lbMa
+      // 
+      this.lbMa.AutoSize = true;
+      this.lbMa.Location = new System.Drawing.Point(93, 29);
+      this.lbMa.Name = "lbMa";
+      this.lbMa.Size = new System.Drawing.Size(29, 16);
+      this.lbMa.TabIndex = 0;
+      this.lbMa.Text = "Mã:";
+      // 
+      // groupBox2
+      // 
+      this.groupBox2.Controls.Add(this.grvCaLamViec);
+      this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.groupBox2.Location = new System.Drawing.Point(0, 141);
+      this.groupBox2.Name = "groupBox2";
+      this.groupBox2.Size = new System.Drawing.Size(800, 309);
+      this.groupBox2.TabIndex = 1;
+      this.groupBox2.TabStop = false;
+      this.groupBox2.Text = "Danh sách ca điểm danh";
       // 
       // grvCaLamViec
       // 
@@ -234,36 +264,6 @@
       this.grvCaLamViec.TabIndex = 0;
       this.grvCaLamViec.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grvCaLamViec_CellContentClick);
       // 
-      // btnAdd
-      // 
-      this.btnAdd.Location = new System.Drawing.Point(264, 106);
-      this.btnAdd.Name = "btnAdd";
-      this.btnAdd.Size = new System.Drawing.Size(75, 23);
-      this.btnAdd.TabIndex = 11;
-      this.btnAdd.Text = "Thêm mới";
-      this.btnAdd.UseVisualStyleBackColor = true;
-      this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-      // 
-      // btnSave
-      // 
-      this.btnSave.Location = new System.Drawing.Point(345, 106);
-      this.btnSave.Name = "btnSave";
-      this.btnSave.Size = new System.Drawing.Size(75, 23);
-      this.btnSave.TabIndex = 12;
-      this.btnSave.Text = "Lưu lại";
-      this.btnSave.UseVisualStyleBackColor = true;
-      this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-      // 
-      // btnClose
-      // 
-      this.btnClose.Location = new System.Drawing.Point(426, 106);
-      this.btnClose.Name = "btnClose";
-      this.btnClose.Size = new System.Drawing.Size(75, 23);
-      this.btnClose.TabIndex = 13;
-      this.btnClose.Text = "Đóng";
-      this.btnClose.UseVisualStyleBackColor = true;
-      this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
-      // 
       // STT
       // 
       this.STT.DataPropertyName = "STT";
@@ -280,6 +280,7 @@
       this.Ma.MinimumWidth = 6;
       this.Ma.Name = "Ma";
       this.Ma.ReadOnly = true;
+      this.Ma.Width = 125;
       // 
       // Ten
       // 
@@ -297,6 +298,7 @@
       this.StartTime.MinimumWidth = 6;
       this.StartTime.Name = "StartTime";
       this.StartTime.ReadOnly = true;
+      this.StartTime.Width = 125;
       // 
       // EndTime
       // 
@@ -305,6 +307,7 @@
       this.EndTime.MinimumWidth = 6;
       this.EndTime.Name = "EndTime";
       this.EndTime.ReadOnly = true;
+      this.EndTime.Width = 125;
       // 
       // Column1
       // 
@@ -378,11 +381,11 @@
       this.Load += new System.EventHandler(this.frm_cauhinh_calamviec_Load);
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
-      this.groupBox2.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.txtStartHour)).EndInit();
-      ((System.ComponentModel.ISupportInitialize)(this.txtStartMinute)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.txtEndMinute)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.txtEndHour)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.txtStartMinute)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.txtStartHour)).EndInit();
+      this.groupBox2.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.grvCaLamViec)).EndInit();
       this.ResumeLayout(false);
 
