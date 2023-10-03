@@ -82,7 +82,7 @@ namespace GATEWAY_SDK
 
     }
 
-    public string search_log(string start_time, string end_time, int page = 1, int numRecord = 30)
+    public string search_log(string start_time, string end_time, int page = 1, int numRecord = 30, Guid searchIdCache = new Guid())
     {
       try
       {
@@ -95,11 +95,11 @@ namespace GATEWAY_SDK
         string queryString = "{" +
           "\"AcsEventCond\": " +
             "{" +
-              "\"searchID\": \"281424d2-12e8-4360-bc68-f41475e462e2\"," +
+              "\"searchID\": \"" + searchIdCache + "\"," +
               "\"searchResultPosition\": " + ((page - 1) * numRecord).ToString() + "," +
               "\"maxResults\": " + numRecord.ToString() + "," +
-              "\"major\": 0," +
-              "\"minor\": 0," +
+              "\"major\": 5," + //0
+              "\"minor\": 75," + //75 event checkin exist user, 0 tất cả event
               "\"startTime\": \"" + start_time + "\"," +
               "\"endTime\": \"" + end_time + "\"\n    " +
             "}" +
@@ -126,8 +126,8 @@ namespace GATEWAY_SDK
         string queryString = "{" +
           "\"AcsEventTotalNumCond\": " +
             "{" +
-              "\"major\": 0," +
-              "\"minor\": 0," +
+              "\"major\": 5," +
+              "\"minor\": 75," +
               "\"startTime\": \"" + start_time + "\"," +
               "\"endTime\": \"" + end_time + "\"\n    " +
             "}" +

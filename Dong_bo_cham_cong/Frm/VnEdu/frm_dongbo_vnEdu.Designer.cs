@@ -38,7 +38,7 @@
       this.label2 = new System.Windows.Forms.Label();
       this.txt_tungay = new System.Windows.Forms.DateTimePicker();
       this.label1 = new System.Windows.Forms.Label();
-      this.groupBox2 = new System.Windows.Forms.GroupBox();
+      this.grLogDevices = new System.Windows.Forms.GroupBox();
       this.grv_logs = new System.Windows.Forms.DataGridView();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.ltLogs = new System.Windows.Forms.ListView();
@@ -51,7 +51,7 @@
       this.panel1 = new System.Windows.Forms.Panel();
       this.timer1 = new System.Windows.Forms.Timer(this.components);
       this.groupBox1.SuspendLayout();
-      this.groupBox2.SuspendLayout();
+      this.grLogDevices.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.grv_logs)).BeginInit();
       this.groupBox3.SuspendLayout();
       this.ctMenuTrayIconSytem.SuspendLayout();
@@ -106,7 +106,8 @@
       // 
       // txt_denngay
       // 
-      this.txt_denngay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+      this.txt_denngay.CustomFormat = "dd/MM/yyyy HH:mm";
+      this.txt_denngay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
       this.txt_denngay.Location = new System.Drawing.Point(442, 33);
       this.txt_denngay.Name = "txt_denngay";
       this.txt_denngay.Size = new System.Drawing.Size(255, 22);
@@ -123,8 +124,8 @@
       // 
       // txt_tungay
       // 
-      this.txt_tungay.CustomFormat = "";
-      this.txt_tungay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+      this.txt_tungay.CustomFormat = "dd/MM/yyyy HH:mm";
+      this.txt_tungay.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
       this.txt_tungay.Location = new System.Drawing.Point(80, 32);
       this.txt_tungay.Name = "txt_tungay";
       this.txt_tungay.Size = new System.Drawing.Size(255, 22);
@@ -139,18 +140,18 @@
       this.label1.TabIndex = 7;
       this.label1.Text = "Từ ngày:";
       // 
-      // groupBox2
+      // grLogDevices
       // 
-      this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+      this.grLogDevices.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-      this.groupBox2.AutoSize = true;
-      this.groupBox2.Controls.Add(this.grv_logs);
-      this.groupBox2.Location = new System.Drawing.Point(0, 146);
-      this.groupBox2.Name = "groupBox2";
-      this.groupBox2.Size = new System.Drawing.Size(840, 328);
-      this.groupBox2.TabIndex = 1;
-      this.groupBox2.TabStop = false;
-      this.groupBox2.Text = "Danh sách dữ liệu điểm danh";
+      this.grLogDevices.AutoSize = true;
+      this.grLogDevices.Controls.Add(this.grv_logs);
+      this.grLogDevices.Location = new System.Drawing.Point(0, 146);
+      this.grLogDevices.Name = "grLogDevices";
+      this.grLogDevices.Size = new System.Drawing.Size(840, 328);
+      this.grLogDevices.TabIndex = 1;
+      this.grLogDevices.TabStop = false;
+      this.grLogDevices.Text = "Tổng: 0 bản ghi";
       // 
       // grv_logs
       // 
@@ -249,7 +250,7 @@
       // timer1
       // 
       this.timer1.Enabled = true;
-      this.timer1.Interval = 60000;
+      this.timer1.Interval = 5000;
       this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
       // 
       // frm_dongbo_vnEdu
@@ -259,7 +260,7 @@
       this.ClientSize = new System.Drawing.Size(1334, 475);
       this.Controls.Add(this.panel1);
       this.Controls.Add(this.groupBox3);
-      this.Controls.Add(this.groupBox2);
+      this.Controls.Add(this.grLogDevices);
       this.Controls.Add(this.groupBox1);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.Name = "frm_dongbo_vnEdu";
@@ -270,7 +271,7 @@
       this.Resize += new System.EventHandler(this.frm_dongbo_vnEdu_Resize);
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
-      this.groupBox2.ResumeLayout(false);
+      this.grLogDevices.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.grv_logs)).EndInit();
       this.groupBox3.ResumeLayout(false);
       this.ctMenuTrayIconSytem.ResumeLayout(false);
@@ -282,7 +283,7 @@
     #endregion
 
     private System.Windows.Forms.GroupBox groupBox1;
-    private System.Windows.Forms.GroupBox groupBox2;
+    private System.Windows.Forms.GroupBox grLogDevices;
     private System.Windows.Forms.Button btn_dongbo;
     private System.Windows.Forms.Button btn_close;
     private System.Windows.Forms.Button btn_search;

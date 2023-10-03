@@ -31,6 +31,8 @@ namespace Dong_bo_cham_cong
     {
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.panel1 = new System.Windows.Forms.Panel();
+      this.lblTotalEvent = new System.Windows.Forms.Label();
+      this.label5 = new System.Windows.Forms.Label();
       this.btn_trangSau = new System.Windows.Forms.Button();
       this.btn_trangTruoc = new System.Windows.Forms.Button();
       this.label4 = new System.Windows.Forms.Label();
@@ -67,6 +69,8 @@ namespace Dong_bo_cham_cong
       // 
       // panel1
       // 
+      this.panel1.Controls.Add(this.lblTotalEvent);
+      this.panel1.Controls.Add(this.label5);
       this.panel1.Controls.Add(this.btn_trangSau);
       this.panel1.Controls.Add(this.btn_trangTruoc);
       this.panel1.Controls.Add(this.label4);
@@ -78,6 +82,24 @@ namespace Dong_bo_cham_cong
       this.panel1.Name = "panel1";
       this.panel1.Size = new System.Drawing.Size(1118, 32);
       this.panel1.TabIndex = 1;
+      // 
+      // lblTotalEvent
+      // 
+      this.lblTotalEvent.AutoSize = true;
+      this.lblTotalEvent.Location = new System.Drawing.Point(45, 7);
+      this.lblTotalEvent.Name = "lblTotalEvent";
+      this.lblTotalEvent.Size = new System.Drawing.Size(51, 16);
+      this.lblTotalEvent.TabIndex = 7;
+      this.lblTotalEvent.Text = "bản ghi";
+      // 
+      // label5
+      // 
+      this.label5.AutoSize = true;
+      this.label5.Location = new System.Drawing.Point(3, 7);
+      this.label5.Name = "label5";
+      this.label5.Size = new System.Drawing.Size(45, 16);
+      this.label5.TabIndex = 6;
+      this.label5.Text = "Tổng: ";
       // 
       // btn_trangSau
       // 
@@ -210,6 +232,7 @@ namespace Dong_bo_cham_cong
       // 
       // txt_denngay
       // 
+      this.txt_denngay.CustomFormat = "dd/MM/yyyy HH:mm";
       this.txt_denngay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
       this.txt_denngay.Location = new System.Drawing.Point(83, 78);
       this.txt_denngay.Name = "txt_denngay";
@@ -227,7 +250,7 @@ namespace Dong_bo_cham_cong
       // 
       // txt_tungay
       // 
-      this.txt_tungay.CustomFormat = "";
+      this.txt_tungay.CustomFormat = "dd/MM/yyyy HH:mm";
       this.txt_tungay.Format = System.Windows.Forms.DateTimePickerFormat.Short;
       this.txt_tungay.Location = new System.Drawing.Point(83, 41);
       this.txt_tungay.Name = "txt_tungay";
@@ -283,5 +306,7 @@ namespace Dong_bo_cham_cong
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.TextBox txt_page;
     private System.Windows.Forms.Button btn_dongbo_vnEdu;
+    private System.Windows.Forms.Label lblTotalEvent;
+    private System.Windows.Forms.Label label5;
   }
 }

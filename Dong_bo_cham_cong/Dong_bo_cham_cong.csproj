@@ -178,12 +178,19 @@
     <Compile Include="Device.Designer.cs">
       <DependentUpon>Device.cs</DependentUpon>
     </Compile>
+    <Compile Include="Dto\CaLamViec.cs" />
     <Compile Include="Dto\Device.cs" />
     <Compile Include="Dto\Device_vnEdu.cs" />
     <Compile Include="Dto\Job.cs" />
     <Compile Include="Dto\Log.cs" />
     <Compile Include="Enums\LogType.cs" />
     <Compile Include="Enums\VendorType.cs" />
+    <Compile Include="Frm\frm_cauhinh_calamviec.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frm\frm_cauhinh_calamviec.Designer.cs">
+      <DependentUpon>frm_cauhinh_calamviec.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\CaLamViec.cs" />
     <Compile Include="Dto\ComboboxItem.cs" />
     <Compile Include="Models\Device.cs" />
@@ -282,6 +289,9 @@
     </Compile>
     <EmbeddedResource Include="Device.resx">
       <DependentUpon>Device.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frm\frm_cauhinh_calamviec.resx">
+      <DependentUpon>frm_cauhinh_calamviec.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frm\frm_cauhinh_chung.resx">
       <DependentUpon>frm_cauhinh_chung.cs</DependentUpon>

@@ -56,6 +56,7 @@ namespace Dong_bo_cham_cong
           int totalMatches = logHikvisionRepository.getTotalEvent(txt_tungay.Value, txt_denngay.Value, device);
           totalPage = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(totalMatches) / Convert.ToDouble(numberRecord)));
           lb_totalPage.Text = totalPage.ToString();
+          lblTotalEvent.Text = String.Format("{0} bản ghi", totalMatches);
 
           List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord);
 

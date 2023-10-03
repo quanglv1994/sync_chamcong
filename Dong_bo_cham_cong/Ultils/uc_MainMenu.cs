@@ -74,5 +74,11 @@ namespace Dong_bo_cham_cong.Ultils
       frm_LichChayJob frm_job = new frm_LichChayJob();
       frm_job.ShowDialog();
     }
+
+    private void caĐiểmDanhToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      frm_cauhinh_calamviec frm_Calamviec = new frm_cauhinh_calamviec();
+      frm_Calamviec.ShowDialog();
+    }
   }
 }
