@@ -25,6 +25,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private readonly string pathProgram = Path.Combine(Application.StartupPath, "Dong_bo_cham_cong.exe");
     private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
     private readonly CaLamViecRepository caLamViecRepository = new CaLamViecRepository();
+    private readonly SyncVnEduRepository syncVnEduRepository = new SyncVnEduRepository();
     private List<CaLamViec> _listCaLamViecs { get; set; }
 
     #region Common
@@ -446,8 +447,6 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
         List<int> rowSyncCorrect = new List<int>();
         List<int> rowSyncFail = new List<int>();
 
-        ApiCheckIn.VnEdu vnEdu = new ApiCheckIn.VnEdu();
-
         string path_device_vnEdu = Application.StartupPath + "/Data/Device_vnEdu.xml";
 
         if (!File.Exists(path_device_vnEdu))
@@ -470,12 +469,14 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
               return;
             }
 
+
             string SN_MayDiemDanh_vnEdu = devicevnEdu.Element("SN_vnEdu").Value;
             string Key_vnEdu = devicevnEdu.Element("Key_vnEdu").Value;
+            ApiCheckIn.VnEdu vnEdu = new ApiCheckIn.VnEdu(SN_MayDiemDanh_vnEdu, Key_vnEdu, _log.UserCode, _log.Time.ToString("yyyy-MM-dd HH:mm:ss"));
 
-            string result = vnEdu.checkin(SN_MayDiemDanh_vnEdu, Key_vnEdu, _log.UserCode, _log.Time.ToString("yyyy-MM-dd HH:mm:ss"));
+            bool isSend = syncVnEduRepository.Send(vnEdu);
 
-            if (result == "OK")
+            if (isSend)
             {
               rowSyncCorrect.Add(_log.Stt);
             }
@@ -487,13 +488,11 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
           }
         }
 
-        if (rowSyncFail.Count == 0)
-        {
-          message = "Đồng bộ thành công " + rowSyncCorrect.Count + " bản ghi điểm danh !";
-          typeLog = "Success";
-          btn_dongbo.Invoke(new Action(() => { btn_dongbo.Enabled = false; }));
-        }
-        else
+        message = "Đồng bộ thành công " + rowSyncCorrect.Count + " bản ghi điểm danh !";
+        typeLog = "Success";
+        btn_dongbo.Invoke(new Action(() => { btn_dongbo.Enabled = false; }));
+
+        if (rowSyncFail.Count > 0)
         {
           typeLog = "Error";
           message = "Đồng bộ thất bại " + rowSyncFail.Count + " bản ghi điểm danh | " + string.Join(",", rowSyncFail.ToArray());

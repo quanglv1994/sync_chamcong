@@ -15,6 +15,7 @@ namespace Dong_bo_cham_cong
     private string path = Application.StartupPath + "/Data/Device.xml";
     private string path_device_vnEdu = Application.StartupPath + "/Data/Device_vnEdu.xml";
     private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
+    private readonly SyncVnEduRepository syncVnEduRepository = new SyncVnEduRepository();
     public int id;
     private int numberRecord = 20;
     private static int totalPage = 0;
@@ -225,7 +226,6 @@ namespace Dong_bo_cham_cong
     {
       List<int> serialList = new List<int>();
 
-      ApiCheckIn.VnEdu vnEdu = new ApiCheckIn.VnEdu();
       for (int i = 1; i <= totalPage; i++)
       {
         List<Info> listEvents = get_data_events(i);
@@ -247,10 +247,10 @@ namespace Dong_bo_cham_cong
 
             string SN_MayDiemDanh_vnEdu = devicevnEdu.Element("SN_vnEdu").Value;
             string Key_vnEdu = devicevnEdu.Element("Key_vnEdu").Value;
+            ApiCheckIn.VnEdu vnEdu = new ApiCheckIn.VnEdu(SN_MayDiemDanh_vnEdu, Key_vnEdu, _event.employeeNoString, Convert.ToDateTime(_event.time).ToString("yyyy-MM-dd HH:mm:ss"));
+            bool isSend = syncVnEduRepository.Send(vnEdu);
 
-            string result = vnEdu.checkin(SN_MayDiemDanh_vnEdu, Key_vnEdu, _event.employeeNoString, Convert.ToDateTime(_event.time).ToString("yyyy-MM-dd HH:mm:ss"));
-
-            if (result != "OK")
+            if (isSend)
             {
               serialList.Add(_event.serialNo);
             }

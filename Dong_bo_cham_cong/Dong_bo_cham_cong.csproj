@@ -53,10 +53,6 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ApiCheckIn, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\ApiCheckIn.dll</HintPath>
-    </Reference>
     <Reference Include="AutoUpdater.NET, Version=1.8.4.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Autoupdater.NET.Official.1.8.4\lib\net45\AutoUpdater.NET.dll</HintPath>
     </Reference>
@@ -179,6 +175,7 @@
       <DependentUpon>Device.cs</DependentUpon>
     </Compile>
     <Compile Include="Dto\CaLamViec.cs" />
+    <Compile Include="Dto\CauHinhChung.cs" />
     <Compile Include="Dto\Device.cs" />
     <Compile Include="Dto\Device_vnEdu.cs" />
     <Compile Include="Dto\Job.cs" />
@@ -252,12 +249,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CaLamViecRepository.cs" />
+    <Compile Include="Repositories\CauHinhChungRepository.cs" />
     <Compile Include="Repositories\CheckinRepository.cs" />
     <Compile Include="Repositories\DeviceRepository.cs" />
     <Compile Include="Repositories\DeviceVnEduRepository.cs" />
     <Compile Include="Repositories\IBaseRepository.cs" />
     <Compile Include="Repositories\LogHikvisionRepository.cs" />
     <Compile Include="Repositories\LogRepository.cs" />
+    <Compile Include="Repositories\SyncVnEduRepository.cs" />
     <Compile Include="Services\CloudEndpoint.cs" />
     <Compile Include="Services\IEndpointService.cs" />
     <Compile Include="Services\LocalEndpointService.cs" />
@@ -369,13 +368,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ManagerLicense\ManagerLicense.csproj">
-      <Project>{8a843b2c-4a90-433d-a31e-6632212d7759}</Project>
-      <Name>ManagerLicense</Name>
-    </ProjectReference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+    <ProjectReference Include="..\ApiCheckIn\ApiCheckIn.csproj">
+      <Project>{b3f9cc85-abf7-41a7-bef6-d7a74f1a01c3}</Project>
+      <Name>ApiCheckIn</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1823.32\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1823.32\build\Microsoft.Web.WebView2.targets')" />

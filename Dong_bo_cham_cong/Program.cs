@@ -20,7 +20,7 @@ namespace Dong_bo_cham_cong
       Application.EnableVisualStyles();
       Application.SetCompatibleTextRenderingDefault(false);
       UpdateVersion.Init();
-      UpdateVersion.RunUpdate();
+      UpdateVersion.RunAutoUpdate();
 
       Application.Run(new frm_dongbo_vnEdu());
     }

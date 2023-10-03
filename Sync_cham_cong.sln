@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigestAuth", "DigestAuth\Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiCheckIn", "ApiCheckIn\ApiCheckIn.csproj", "{B3F9CC85-ABF7-41A7-BEF6-D7A74F1A01C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cloud_Gateway", "Cloud_Gateway\Cloud_Gateway.csproj", "{90B0B6E0-2A39-4C55-9A31-F6E25B6C4A4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{B3F9CC85-ABF7-41A7-BEF6-D7A74F1A01C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3F9CC85-ABF7-41A7-BEF6-D7A74F1A01C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3F9CC85-ABF7-41A7-BEF6-D7A74F1A01C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90B0B6E0-2A39-4C55-9A31-F6E25B6C4A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90B0B6E0-2A39-4C55-9A31-F6E25B6C4A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90B0B6E0-2A39-4C55-9A31-F6E25B6C4A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90B0B6E0-2A39-4C55-9A31-F6E25B6C4A4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

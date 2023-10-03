@@ -11,6 +11,23 @@ namespace ApiCheckIn
   {
     const string urlCheckin = "https://s19.vnedu.vn/v3/smartidapi/cdata";
 
+    public VnEdu()
+    {
+    }
+
+    public VnEdu(string sN, string kEY, string iD_NV, string dateCheckIn)
+    {
+      SN = sN;
+      KEY = kEY;
+      ID_NV = iD_NV;
+      DateCheckIn = dateCheckIn;
+    }
+
+    public string SN { get; set; }
+    public string KEY { get; set; }
+    public string ID_NV { get; set; }
+    public string DateCheckIn { get; set; }
+
     private string GetMd5Hash(MD5 md5Hash, string input)
     {
       // Convert the input string to a byte array and compute the hash.
@@ -23,7 +40,7 @@ namespace ApiCheckIn
       return sBuilder.ToString();
     }
 
-    public string checkin(string SN, string KEY, string ID_NV, string DateCheckIn)
+    public string checkin()
     {
       //hash = md5(SN + KEY + DATA)
       //SN = DS-K1T341AMF20210406V030230
@@ -38,7 +55,6 @@ namespace ApiCheckIn
       {
         hash = GetMd5Hash(md5Hash, SN + KEY + DATA);
       }
-
 
       var client = new RestClient(urlCheckin + "?SN=" + SN + "&table=ATTLOG&type=device&hash=" + hash);
       var request = new RestRequest("", Method.Post);
