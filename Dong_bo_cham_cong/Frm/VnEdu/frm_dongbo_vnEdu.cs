@@ -185,11 +185,11 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       }
     }
 
-    private List<Info> get_data_events_hikvision(Device device, int page, int numberRecord)
+    private List<Info> get_data_events_hikvision(Device device, int page, int numberRecord, Guid searchIdCache = new Guid())
     {
       try
       {
-        List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord);
+        List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord, searchIdCache);
 
         return infoList;
       }
@@ -256,6 +256,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
             SDK_Hikvision hik = new SDK_Hikvision("http://" + device.Ip + ":" + device.Port, device.Username, device.Password);
 
+            Guid searchIndex = Guid.NewGuid();
             if (_hang == VendorType.Hikvision)
             {
               if (hik.login())
@@ -266,7 +267,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
                 totalEvent += totalMatches;
                 for (int page = 1; page <= totalPage; page++)
                 {
-                  List<Info> listInfos = get_data_events_hikvision(device, page, numberRecord);
+                  List<Info> listInfos = get_data_events_hikvision(device, page, numberRecord, searchIndex);
                   //listEventHikvisons.AddRange(listInfos);
 
                   foreach (Info info in listInfos)

@@ -2,6 +2,8 @@
 using RestSharp;
 using System;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace GATEWAY_SDK
 {
@@ -18,22 +20,17 @@ namespace GATEWAY_SDK
       this.password = password;
     }
 
-    //public bool login()
-    //{
-    //  string dir = "/ISAPI/System/deviceinfo";
-
-    //  DigestAuthFixer digest = new DigestAuthFixer(host, username, password);
-    //  HttpStatusCode status = digest.GrabResponseStatus(dir);
-
-    //  if (status == HttpStatusCode.OK)
-    //  {
-    //    return true;
-    //  }
-    //  else
-    //  {
-    //    return false;
-    //  }
-    //}
+    private string GetMd5Hash(MD5 md5Hash, string input)
+    {
+      // Convert the input string to a byte array and compute the hash.
+      byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+      StringBuilder sBuilder = new StringBuilder();
+      for (int i = 0; i < data.Length; i++)
+      {
+        sBuilder.Append(data[i].ToString("x2"));
+      }
+      return sBuilder.ToString();
+    }
 
     public bool login()
     {
@@ -63,6 +60,7 @@ namespace GATEWAY_SDK
       }
 
     }
+
     public string get_device()
     {
       try
@@ -88,14 +86,22 @@ namespace GATEWAY_SDK
       {
         //string start_time = "2023-04-06T00:00:00+07:00";
         //string end_time = "2023-04-07T23:59:59+07:00";
-        string dir = "/ISAPI/AccessControl/AcsEvent?format=json";//&security=1
+        //string dir = "/ISAPI/AccessControl/AcsEvent?format=json";//&security=1
+        string timeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
+        string iv = "";
+        using (MD5 md5Hash = MD5.Create())
+        {
+          iv = GetMd5Hash(md5Hash, timeStamp);
+        }
+
+        string dir = "/ISAPI/AccessControl/AcsEvent?format=json&security=1&iv=" + iv.ToString();
         var client = new RestClient(host + dir);
         client.Authenticator = new DigestAuthenticator(username, password);
         var request = new RestRequest("", Method.Post);
         string queryString = "{" +
           "\"AcsEventCond\": " +
             "{" +
-              "\"searchID\": \"" + searchIdCache + "\"," +
+              "\"searchID\": \"" + searchIdCache.ToString() + "\"," +
               "\"searchResultPosition\": " + ((page - 1) * numRecord).ToString() + "," +
               "\"maxResults\": " + numRecord.ToString() + "," +
               "\"major\": 5," + //0

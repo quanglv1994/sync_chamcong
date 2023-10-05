@@ -18,14 +18,14 @@ namespace Dong_bo_cham_cong.Repositories
       return acsEventTotalNum.AcsEventTotalNum.totalNum;
     }
 
-    public List<Info> getListEvents(DateTime tu_Ngay, DateTime den_Ngay, Dto.Device device, int page, int numberRecord = 30)
+    public List<Info> getListEvents(DateTime tu_Ngay, DateTime den_Ngay, Dto.Device device, int page, int numberRecord = 30, Guid searchIdCache = new Guid())
     {
       //string start_time = "2023-04-06T00:00:00+07:00";
       //string end_time = "2023-04-07T23:59:59+07:00";
       string start_time = tu_Ngay.ToString("yyyy-MM-ddTHH:mm:00+07:00");
       string end_time = den_Ngay.ToString("yyyy-MM-ddTHH:mm:59+07:00");
       SDK_Hikvision hik = new SDK_Hikvision("http://" + device.Ip + ":" + device.Port, device.Username, device.Password);
-			string logJsons = hik.search_log(start_time, end_time, page, numberRecord);
+			string logJsons = hik.search_log(start_time, end_time, page, numberRecord, searchIdCache);
       LogHikvision logHikvision = JsonSerializer.Deserialize<LogHikvision>(logJsons);
       if (logHikvision.AcsEvent.InfoList?.Count > 0)
       {

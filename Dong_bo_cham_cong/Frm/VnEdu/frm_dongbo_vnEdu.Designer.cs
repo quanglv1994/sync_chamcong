@@ -83,6 +83,7 @@
       // 
       // btn_dongbo
       // 
+      this.btn_dongbo.Enabled = false;
       this.btn_dongbo.Location = new System.Drawing.Point(328, 77);
       this.btn_dongbo.Name = "btn_dongbo";
       this.btn_dongbo.Size = new System.Drawing.Size(98, 23);
