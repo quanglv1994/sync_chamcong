@@ -22,28 +22,41 @@ namespace Dong_bo_cham_cong.Ultils
     {
       if (args.IsUpdateAvailable)
       {
-        DialogResult dialogResult;
-        dialogResult =
-                MessageBox.Show(
-                    $@"Phần mềm có phiên bản mới {args.CurrentVersion}. Phiên bản bạn đang sử dụng hiện tại  {args.InstalledVersion}. Bạn có muốn cập nhật phần mềm không?", @"Cập nhật phần mềm",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Information);
-
-        if (dialogResult.Equals(DialogResult.Yes) || dialogResult.Equals(DialogResult.OK))
+        try
         {
-          try
+          if (AutoUpdater.DownloadUpdate(args))
           {
-            if (AutoUpdater.DownloadUpdate(args))
-            {
-              Application.Exit();
-            }
-          }
-          catch (Exception exception)
-          {
-            MessageBox.Show(exception.Message, exception.GetType().ToString(), MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
+            Application.Exit();
           }
         }
+        catch (Exception exception)
+        {
+          MessageBox.Show(exception.Message, exception.GetType().ToString(), MessageBoxButtons.OK,
+              MessageBoxIcon.Error);
+        }
+
+        //DialogResult dialogResult;
+        //dialogResult =
+        //        MessageBox.Show(
+        //            $@"Phần mềm có phiên bản mới {args.CurrentVersion}. Phiên bản bạn đang sử dụng hiện tại  {args.InstalledVersion}. Bạn có muốn cập nhật phần mềm không?", @"Cập nhật phần mềm",
+        //            MessageBoxButtons.YesNo,
+        //            MessageBoxIcon.Information);
+
+        //if (dialogResult.Equals(DialogResult.Yes) || dialogResult.Equals(DialogResult.OK))
+        //{
+        //  try
+        //  {
+        //    if (AutoUpdater.DownloadUpdate(args))
+        //    {
+        //      Application.Exit();
+        //    }
+        //  }
+        //  catch (Exception exception)
+        //  {
+        //    MessageBox.Show(exception.Message, exception.GetType().ToString(), MessageBoxButtons.OK,
+        //        MessageBoxIcon.Error);
+        //  }
+        //}
       }
       //else
       //{

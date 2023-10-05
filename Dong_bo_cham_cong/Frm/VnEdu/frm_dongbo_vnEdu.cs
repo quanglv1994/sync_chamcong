@@ -12,6 +12,8 @@ using System.Xml.Linq;
 using Microsoft.Win32;
 using Dong_bo_cham_cong.Repositories;
 using System.Threading.Tasks;
+using System.Threading;
+using AutoUpdaterDotNET;
 
 namespace Dong_bo_cham_cong.Frm.VnEdu
 {
@@ -39,6 +41,12 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       _listCaLamViecs = caLamViecRepository.GetList();
       txt_tungay.Value = DateTime.Now.AddHours(-1);
       panel1.Controls.Add(new uc_MainMenu());
+
+      //get version current
+      System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+      System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+      string version = fvi.FileVersion;
+      lbVersion.Text = version;
 
       var prevOpenedForm = Application.OpenForms.Cast<Form>().First();
 
@@ -313,7 +321,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
                           i++;
                         }
-                        else if(logExist.Time > timeInfo)
+                        else if (logExist.Time > timeInfo)
                         {
                           var itemIndex = listLogDevices.FindIndex(x => x.Equals(logExist));
                           if (itemIndex > -1)
@@ -327,16 +335,20 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
                     }
                   }
 
-                  //Thread.Sleep(1000);
+                  //Thread.Sleep(500);
                 }
               }
               else
               {
                 string message = "Không thể kết nối được đến máy chấm công " + "http://" + dr["Ip"].ToString() + ":" + dr["Port"].ToString();
-                NotifyMessage(String.Format("{0}: {1}", DateTime.Now, message));
+
                 if (saveLog)
                 {
                   SaveLog("Error", message);
+                }
+                else
+                {
+                  NotifyMessage(String.Format("{0}: {1}", DateTime.Now, message));
                 }
               }
             }
@@ -398,6 +410,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
         var task = new Task(action);
         task.Start();
       }
+
     }
 
     private void SaveLog(string type, string message)
@@ -439,6 +452,10 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
     private void dong_bo(DateTime tu_ngay, DateTime den_ngay)
     {
+      this.Invoke(new Action(() => {
+        timer1.Stop();
+      }));
+
       string typeLog = "Success";
       string message = "";
       var listLogDevices = getLogDevice(tu_ngay, den_ngay, saveLog: true);
@@ -507,6 +524,10 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       }
 
       SaveLog(typeLog, message);
+      this.Invoke(new Action(() => {
+        //Thread.Sleep(5000);
+        timer1.Start();
+      }));
     }
 
     private void frm_dongbo_vnEdu_FormClosing(object sender, FormClosingEventArgs e)
@@ -582,7 +603,10 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       //dong_bo_async(DateTime.Now, DateTime.Now);
       if (jobs.Any())
       {
-        dong_bo_async(DateTime.Now, DateTime.Now);
+        DateTime tu_ngay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+        DateTime den_ngay = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 0);
+        dong_bo_async(tu_ngay, den_ngay);
+        //dong_bo_async(DateTime.Now, DateTime.Now);
       }
     }
 

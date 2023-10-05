@@ -39,9 +39,15 @@
       this.txt_tungay = new System.Windows.Forms.DateTimePicker();
       this.label1 = new System.Windows.Forms.Label();
       this.grLogDevices = new System.Windows.Forms.GroupBox();
+      this.panel2 = new System.Windows.Forms.Panel();
+      this.lbTotalLog = new System.Windows.Forms.Label();
+      this.lbTotalSync = new System.Windows.Forms.Label();
       this.grv_logs = new System.Windows.Forms.DataGridView();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.ltLogs = new System.Windows.Forms.ListView();
+      this.panel3 = new System.Windows.Forms.Panel();
+      this.lbVersion = new System.Windows.Forms.Label();
+      this.label3 = new System.Windows.Forms.Label();
       this.notifyIconSystem = new System.Windows.Forms.NotifyIcon(this.components);
       this.ctMenuTrayIconSytem = new System.Windows.Forms.ContextMenuStrip(this.components);
       this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,15 +56,13 @@
       this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.panel1 = new System.Windows.Forms.Panel();
       this.timer1 = new System.Windows.Forms.Timer(this.components);
-      this.panel2 = new System.Windows.Forms.Panel();
-      this.lbTotalSync = new System.Windows.Forms.Label();
-      this.lbTotalLog = new System.Windows.Forms.Label();
       this.groupBox1.SuspendLayout();
       this.grLogDevices.SuspendLayout();
+      this.panel2.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.grv_logs)).BeginInit();
       this.groupBox3.SuspendLayout();
+      this.panel3.SuspendLayout();
       this.ctMenuTrayIconSytem.SuspendLayout();
-      this.panel2.SuspendLayout();
       this.SuspendLayout();
       // 
       // groupBox1
@@ -79,7 +83,6 @@
       // 
       // btn_dongbo
       // 
-      this.btn_dongbo.Enabled = false;
       this.btn_dongbo.Location = new System.Drawing.Point(328, 77);
       this.btn_dongbo.Name = "btn_dongbo";
       this.btn_dongbo.Size = new System.Drawing.Size(98, 23);
@@ -157,6 +160,36 @@
       this.grLogDevices.TabIndex = 1;
       this.grLogDevices.TabStop = false;
       // 
+      // panel2
+      // 
+      this.panel2.Controls.Add(this.lbTotalLog);
+      this.panel2.Controls.Add(this.lbTotalSync);
+      this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+      this.panel2.Location = new System.Drawing.Point(3, 18);
+      this.panel2.Name = "panel2";
+      this.panel2.Size = new System.Drawing.Size(834, 25);
+      this.panel2.TabIndex = 2;
+      // 
+      // lbTotalLog
+      // 
+      this.lbTotalLog.AutoSize = true;
+      this.lbTotalLog.Dock = System.Windows.Forms.DockStyle.Right;
+      this.lbTotalLog.Location = new System.Drawing.Point(669, 0);
+      this.lbTotalLog.Name = "lbTotalLog";
+      this.lbTotalLog.Size = new System.Drawing.Size(165, 16);
+      this.lbTotalLog.TabIndex = 1;
+      this.lbTotalLog.Text = "Tổng: 0 bản ghi điểm danh";
+      // 
+      // lbTotalSync
+      // 
+      this.lbTotalSync.AutoSize = true;
+      this.lbTotalSync.Dock = System.Windows.Forms.DockStyle.Left;
+      this.lbTotalSync.Location = new System.Drawing.Point(0, 0);
+      this.lbTotalSync.Name = "lbTotalSync";
+      this.lbTotalSync.Size = new System.Drawing.Size(99, 16);
+      this.lbTotalSync.TabIndex = 0;
+      this.lbTotalSync.Text = "Tổng: 0 bản ghi";
+      // 
       // grv_logs
       // 
       this.grv_logs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -170,13 +203,12 @@
       // 
       // groupBox3
       // 
-      this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
       this.groupBox3.Controls.Add(this.ltLogs);
-      this.groupBox3.Location = new System.Drawing.Point(843, 36);
+      this.groupBox3.Controls.Add(this.panel3);
+      this.groupBox3.Dock = System.Windows.Forms.DockStyle.Right;
+      this.groupBox3.Location = new System.Drawing.Point(843, 0);
       this.groupBox3.Name = "groupBox3";
-      this.groupBox3.Size = new System.Drawing.Size(491, 511);
+      this.groupBox3.Size = new System.Drawing.Size(491, 551);
       this.groupBox3.TabIndex = 2;
       this.groupBox3.TabStop = false;
       this.groupBox3.Text = "Log";
@@ -188,11 +220,39 @@
       this.ltLogs.HideSelection = false;
       this.ltLogs.Location = new System.Drawing.Point(3, 18);
       this.ltLogs.Name = "ltLogs";
-      this.ltLogs.Size = new System.Drawing.Size(485, 490);
+      this.ltLogs.Size = new System.Drawing.Size(485, 505);
       this.ltLogs.Sorting = System.Windows.Forms.SortOrder.Descending;
-      this.ltLogs.TabIndex = 0;
+      this.ltLogs.TabIndex = 2;
       this.ltLogs.UseCompatibleStateImageBehavior = false;
       this.ltLogs.View = System.Windows.Forms.View.List;
+      // 
+      // panel3
+      // 
+      this.panel3.Controls.Add(this.lbVersion);
+      this.panel3.Controls.Add(this.label3);
+      this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+      this.panel3.Location = new System.Drawing.Point(3, 523);
+      this.panel3.Name = "panel3";
+      this.panel3.Size = new System.Drawing.Size(485, 25);
+      this.panel3.TabIndex = 1;
+      // 
+      // lbVersion
+      // 
+      this.lbVersion.AutoSize = true;
+      this.lbVersion.Location = new System.Drawing.Point(73, 3);
+      this.lbVersion.Name = "lbVersion";
+      this.lbVersion.Size = new System.Drawing.Size(24, 16);
+      this.lbVersion.TabIndex = 1;
+      this.lbVersion.Text = "1.0";
+      // 
+      // label3
+      // 
+      this.label3.AutoSize = true;
+      this.label3.Location = new System.Drawing.Point(3, 3);
+      this.label3.Name = "label3";
+      this.label3.Size = new System.Drawing.Size(73, 16);
+      this.label3.TabIndex = 0;
+      this.label3.Text = "Phiên bản: ";
       // 
       // notifyIconSystem
       // 
@@ -249,44 +309,14 @@
       this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
       this.panel1.Location = new System.Drawing.Point(0, 0);
       this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(1334, 30);
+      this.panel1.Size = new System.Drawing.Size(843, 30);
       this.panel1.TabIndex = 5;
       // 
       // timer1
       // 
       this.timer1.Enabled = true;
-      this.timer1.Interval = 5000;
+      this.timer1.Interval = 20000;
       this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-      // 
-      // panel2
-      // 
-      this.panel2.Controls.Add(this.lbTotalLog);
-      this.panel2.Controls.Add(this.lbTotalSync);
-      this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panel2.Location = new System.Drawing.Point(3, 18);
-      this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(834, 25);
-      this.panel2.TabIndex = 2;
-      // 
-      // lbTotalSync
-      // 
-      this.lbTotalSync.AutoSize = true;
-      this.lbTotalSync.Dock = System.Windows.Forms.DockStyle.Left;
-      this.lbTotalSync.Location = new System.Drawing.Point(0, 0);
-      this.lbTotalSync.Name = "lbTotalSync";
-      this.lbTotalSync.Size = new System.Drawing.Size(99, 16);
-      this.lbTotalSync.TabIndex = 0;
-      this.lbTotalSync.Text = "Tổng: 0 bản ghi";
-      // 
-      // lbTotalLog
-      // 
-      this.lbTotalLog.AutoSize = true;
-      this.lbTotalLog.Dock = System.Windows.Forms.DockStyle.Right;
-      this.lbTotalLog.Location = new System.Drawing.Point(669, 0);
-      this.lbTotalLog.Name = "lbTotalLog";
-      this.lbTotalLog.Size = new System.Drawing.Size(165, 16);
-      this.lbTotalLog.TabIndex = 1;
-      this.lbTotalLog.Text = "Tổng: 0 bản ghi điểm danh";
       // 
       // frm_dongbo_vnEdu
       // 
@@ -307,11 +337,13 @@
       this.groupBox1.ResumeLayout(false);
       this.groupBox1.PerformLayout();
       this.grLogDevices.ResumeLayout(false);
-      ((System.ComponentModel.ISupportInitialize)(this.grv_logs)).EndInit();
-      this.groupBox3.ResumeLayout(false);
-      this.ctMenuTrayIconSytem.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
       this.panel2.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.grv_logs)).EndInit();
+      this.groupBox3.ResumeLayout(false);
+      this.panel3.ResumeLayout(false);
+      this.panel3.PerformLayout();
+      this.ctMenuTrayIconSytem.ResumeLayout(false);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -338,9 +370,12 @@
     private System.Windows.Forms.Timer timer1;
     private System.Windows.Forms.ToolStripMenuItem tuDongChayToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem tatTudongChayToolStripMenuItem;
-    private System.Windows.Forms.ListView ltLogs;
     private System.Windows.Forms.Panel panel2;
     private System.Windows.Forms.Label lbTotalLog;
     private System.Windows.Forms.Label lbTotalSync;
+    private System.Windows.Forms.ListView ltLogs;
+    private System.Windows.Forms.Panel panel3;
+    private System.Windows.Forms.Label lbVersion;
+    private System.Windows.Forms.Label label3;
   }
 }
