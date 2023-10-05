@@ -94,7 +94,7 @@ namespace GATEWAY_SDK
           iv = GetMd5Hash(md5Hash, timeStamp);
         }
 
-        string dir = "/ISAPI/AccessControl/AcsEvent?format=json&security=1&iv=" + iv.ToString();
+        string dir = "/ISAPI/AccessControl/AcsEvent?format=json&security=0&iv=" + iv.ToString();//security = 1 => encrypt data
         var client = new RestClient(host + dir);
         client.Authenticator = new DigestAuthenticator(username, password);
         var request = new RestRequest("", Method.Post);
