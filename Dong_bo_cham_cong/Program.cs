@@ -21,7 +21,6 @@ namespace Dong_bo_cham_cong
       Application.SetCompatibleTextRenderingDefault(false);
       UpdateVersion.Init();
       UpdateVersion.RunAutoUpdate();
-
       Application.Run(new frm_dongbo_vnEdu());
     }
   }

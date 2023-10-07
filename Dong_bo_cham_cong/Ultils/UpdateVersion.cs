@@ -1,5 +1,7 @@
 ﻿using AutoUpdaterDotNET;
 using System;
+using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Dong_bo_cham_cong.Ultils
@@ -15,7 +17,10 @@ namespace Dong_bo_cham_cong.Ultils
       AutoUpdater.CheckForUpdateEvent += AutoUpdaterOnCheckForUpdateEvent;
       //string version = fvi.FileVersion;
       //label1.Text = "Phiên bản: " + version;
-      AutoUpdater.DownloadPath = "update";
+      //AutoUpdater.UpdateMode = Mode.Forced; 
+      AutoUpdater.AppTitle = "Cập nhật đồng bộ điểm danh vnpt";
+      AutoUpdater.RunUpdateAsAdmin = true;
+      AutoUpdater.DownloadPath = Application.StartupPath + "/update";
     }
 
     private static void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
@@ -67,6 +72,11 @@ namespace Dong_bo_cham_cong.Ultils
     
     public static void RunAutoUpdate()
     {
+      if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1)
+      {
+        System.Diagnostics.Process.GetCurrentProcess().Kill();
+      }
+
       AutoUpdater.Mandatory = false;
       AutoUpdater.Start(_urlCheckVersion);
     }

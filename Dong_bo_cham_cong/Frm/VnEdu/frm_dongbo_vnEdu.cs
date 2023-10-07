@@ -28,7 +28,6 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private readonly LogHikvisionRepository logHikvisionRepository = new LogHikvisionRepository();
     private readonly CaLamViecRepository caLamViecRepository = new CaLamViecRepository();
     private readonly SyncVnEduRepository syncVnEduRepository = new SyncVnEduRepository();
-    private List<CaLamViec> _listCaLamViecs { get; set; }
 
     #region Common
     public frm_dongbo_vnEdu()
@@ -38,7 +37,6 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
     private void frm_dongbo_vnEdu_Load(object sender, EventArgs e)
     {
-      _listCaLamViecs = caLamViecRepository.GetList();
       txt_tungay.Value = DateTime.Now.AddHours(-1);
       panel1.Controls.Add(new uc_MainMenu());
 
@@ -126,7 +124,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
 
     private void NotifyMessage(string message)
     {
-      if (this.Visible)
+      if (!notifyIconSystem.Visible)
       {
         //open windown
         MessageBox.Show(message);
@@ -185,11 +183,11 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       }
     }
 
-    private List<Info> get_data_events_hikvision(Device device, int page, int numberRecord, Guid searchIdCache = new Guid())
+    private List<Info> get_data_events_hikvision(DateTime tu_ngay, DateTime den_ngay, Device device, int page, int numberRecord, Guid searchIdCache = new Guid())
     {
       try
       {
-        List<Info> infoList = logHikvisionRepository.getListEvents(txt_tungay.Value, txt_denngay.Value, device, page, numberRecord, searchIdCache);
+        List<Info> infoList = logHikvisionRepository.getListEvents(tu_ngay, den_ngay, device, page, numberRecord, searchIdCache);
 
         return infoList;
       }
@@ -200,30 +198,9 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
       }
     }
 
-    private CaLamViec getTimeLogHikUpdated(Info infoLog)
-    {
-      foreach (var calamviec in _listCaLamViecs)
-      {
-        DateTime time = Convert.ToDateTime(infoLog.time);
-
-        int hour = time.Hour;
-        int minute = time.Minute;
-
-        DateTime timeCheck = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, hour, minute, 0);
-
-        DateTime startTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, calamviec.StartHour, calamviec.StartMinute, 0);
-        DateTime endTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, calamviec.EndHour, calamviec.EndMinute, 0);
-
-        if (timeCheck >= startTime && timeCheck <= endTime)
-        {
-          return calamviec;
-        }
-      }
-      return null;
-    }
-
     private List<Log> getLogDevice(DateTime tu_ngay, DateTime den_ngay, bool saveLog = false)
     {
+      List<CaLamViec> _listCaLamViecs = caLamViecRepository.GetList();
       List<Log> listLogDevices = new List<Log>();
       int i = 1;
       int totalEvent = 0;
@@ -267,7 +244,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
                 totalEvent += totalMatches;
                 for (int page = 1; page <= totalPage; page++)
                 {
-                  List<Info> listInfos = get_data_events_hikvision(device, page, numberRecord, searchIndex);
+                  List<Info> listInfos = get_data_events_hikvision(tu_ngay, den_ngay, device, page, numberRecord, searchIndex);
                   //listEventHikvisons.AddRange(listInfos);
 
                   foreach (Info info in listInfos)
@@ -399,7 +376,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
     private void dong_bo_async(DateTime tu_ngay, DateTime den_ngay)
     {
       Action action = () => { dong_bo(tu_ngay, den_ngay); };
-      if (this.Visible)
+      if (!notifyIconSystem.Visible)
       {
         using (WatingForm waitingForm = new WatingForm(action, "Đang đồng bộ dữ liệu chấm công. Vui lòng đợi ..."))
         {
@@ -437,7 +414,7 @@ namespace Dong_bo_cham_cong.Frm.VnEdu
         var listViewItem = new ListViewItem(log.Element("Created_at").Value + ": " + log.Element("Message").Value);
         ltLogs.Invoke(new Action(() => { ltLogs.Items.Add(listViewItem); }));
 
-        if (this.Visible)
+        if (!notifyIconSystem.Visible)
         {
           NotifyMessage(string.Format("{0}: {1}", created_at, message));
           //notifyIconSystem.ShowBalloonTip(5000, notifyIconSystem.BalloonTipTitle, string.Format("{0}: {1}", created_at, message), ToolTipIcon.Info);
